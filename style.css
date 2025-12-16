@@ -1,0 +1,429 @@
+/* ============================================================
+   New theme: Edge-like polish (colors, typography, header & hero)
+   - Keeps your HTML content and structure
+   - Applies a clean navy + accent blue palette, Poppins font
+   ============================================================ */
+
+:root{
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --muted: #6b7280;
+  --text: #102a43; /* deep slate for readable headings */
+  --text-muted: #5a6b7a;
+  --accent: #1caea7; /* teal accent (old color) */
+  --accent-strong: #0e8b83;
+  --accent-rgb: 28,174,167;
+  --accent-on: #ffffff;
+  --header-height: 64px;
+  --edge-pad: 12px; /* symmetric padding used for logo and hamburger edges */
+  --edge-nudge: 16px; /* small visual nudge applied in addition to edge-pad (logo/hamburger/contact) */
+  --max-width: 1600px;
+  --shadow-sm: 0 6px 20px rgba(16,42,67,0.08);
+}
+
+/* Use web fonts loaded in index.html. Fallback to system fonts */
+html,body{height:100%;margin:0;padding:0;font-family: 'Poppins', 'Noto Sans Greek', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;}
+
+*{box-sizing:border-box}
+
+/* Container */
+.container{max-width:var(--max-width);margin:0 auto;padding:0 2rem 0 1rem;display:flex;align-items:center;height:var(--header-height)}
+
+/* Header-specific container: tighten side padding so logo and nav feel closer to the
+  left/right edges while keeping the main page container centered. Keep header
+  container padding small so the logo sits flush-left and the nav/hamburger can
+  align properly without huge hardcoded offsets. */
+/* Header-specific container: keep small asymmetric padding so logo sits flush-left
+  while the main content remains visually centered. Matches positioning from style2.css */
+header#main-header .container{padding:0 2rem 0 1rem;height:var(--header-height)}
+
+/* Header / navigation */
+header#main-header{position:fixed;left:0;right:0;top:0;z-index:1400;background:transparent;transition:background 220ms ease, box-shadow 220ms ease;padding-top:6px;padding-bottom:6px}
+/* Ensure header uses the theme header height and aligns its contents consistently */
+header#main-header{height:var(--header-height);display:flex;align-items:center}
+/* Use a translucent blurred background for the header when scrolled instead of solid white */
+/* Use a translucent, lower-opacity backdrop with blur (transparent feel instead of solid white) */
+header#main-header.scrolled{background: rgba(255,255,255,0.12); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); box-shadow:var(--shadow-sm)}
+
+/* Active / focus states for top navigation: keep consistent visuals in both
+   transparent (over hero) and scrolled (opaque) header states. Also style
+   aria-pressed for keyboard users. */
+#top-menu a.active,
+header#main-header.transparent #top-menu a.active,
+header#main-header.scrolled #top-menu a.active,
+#top-menu a[aria-pressed="true"],
+#top-menu a[aria-current="page"],
+header#main-header #top-menu a.active{
+  background:var(--accent) !important;
+  color:var(--accent-on) !important;
+  box-shadow:0 8px 28px rgba(var(--accent-rgb),0.12);
+}
+
+/* Keyboard focus visible state for nav links */
+#top-menu a:focus-visible{outline:3px solid rgba(var(--accent-rgb),0.12);outline-offset:3px;border-radius:8px}
+
+.logo-container, .logo_container { display:flex; align-items:center; gap:.75rem; flex:0 0 auto; margin-right:auto; margin-left:0; padding-left:0; order:0; }
+/* slightly reduced logo padding so it feels snug on small screens */
+.logo-container img, .logo_container img, #logo { height:44px; width:auto; display:block; padding:0 20px; transform: translateY(0px); }
+/* default spacing: avoid large hard-coded margins (previous margin-right:750px removed) */
+.logo-container{margin-left:200px;margin-right:0}
+
+/* Reduce the huge gap on smaller viewports so the layout remains usable */
+@media (max-width:1200px){
+  .logo-container{margin-right:20px}
+}
+#top-menu-nav{flex:1;display:flex;justify-content:flex-end}
+
+/* Make the top navigation span the full viewport so the logo and hamburger can align flush
+  to the left/right edges while the rest of the page content remains centered within .container. */
+#et-top-navigation{display:flex;align-items:center;gap:12px; width:100vw; margin-left:calc(50% - 50vw); padding-left:calc(var(--edge-pad) + var(--edge-nudge)); padding-right:0; box-sizing:border-box}
+#et-top-navigation{justify-content:space-between}
+
+#top-menu-nav{flex:1;display:flex;justify-content:flex-end}
+#top-menu{list-style:none;display:flex;gap:8px;padding:0;margin:0;align-items:center;justify-content:flex-end;margin-right:calc(var(--edge-pad) + var(--edge-nudge));flex-wrap:nowrap}
+#top-menu li{white-space:nowrap}
+#top-menu a{display:inline-block;color:#000;background:transparent;padding:8px 20px;border-radius:8px;text-decoration:none;font-weight:600;font-size:0.95rem;transition:background 160ms ease,color 160ms ease}
+
+/* Ensure menu items end at the right inset. Remove auto margin so the group ends flush-right.
+   Individual items stay in normal flow; the whole list is aligned right via #top-menu. */
+#top-menu li:last-child{margin-left:0;margin-right:0}
+
+/* Desktop: show white nav text overlayed on hero; on scrolled state, keep smaller pill highlights */
+/* Use explicit transparent/scrolled states to ensure proper color contrast */
+header#main-header.transparent #top-menu a{color:#fff}
+header#main-header.scrolled #top-menu a{color:#000}
+#top-menu a:hover{background:rgba(255,255,255,0.08)}
+/* Ensure active nav link shows consistent accent styling regardless of header transparency */
+#top-menu a.active{background:var(--accent);color:var(--accent-on)}
+/* stronger rule to override any inherited color when header is transparent */
+header#main-header .nav a.active, #top-menu a.active{background:var(--accent);color:var(--accent-on)}
+
+/* Ensure desktop menu items used elsewhere don't accidentally inherit white color when header is over the hero */
+#top-menu a[role="menuitem"]{color:inherit !important}
+
+/* Mobile toggle */
+.mobile-toggle{display:none;background:transparent;border:0;color:var(--accent);font-size:22px;padding:8px}
+
+@media (max-width:880px){
+  .mobile-toggle{display:inline-flex;align-items:center;justify-content:center}
+  /* On small screens we prefer the JS to toggle showing/hiding the inline menu; ensure it's hidden by default */
+  #top-menu{display:none !important}
+
+  /* Keep the top navigation full-bleed but use the container padding to set the visual inset */
+  #et-top-navigation{padding-left:0;padding-right:0}
+
+  /* Make layout order explicit so logo is left and mobile toggle is right regardless of DOM order */
+  .logo-container, .logo_container{order:0;margin-left:0;margin-right:0;padding-left:0}
+  #top-menu-nav{order:1;flex:1 1 auto;display:flex}
+  #mobile-toggle{order:2;margin-left:0;margin-right:calc(var(--edge-pad) + var(--edge-nudge))}
+
+  /* make the touch target slightly larger while keeping the visual flush */
+  #mobile-toggle{padding-left:8px;padding-right:calc(var(--edge-pad) + var(--edge-nudge))}
+}
+
+/* Finer-grained mobile breakpoints: reduce gap and sizes on narrower screens */
+@media (max-width:600px){
+  #et-top-navigation{gap:10px}
+  .logo-container img{height:40px}
+  #mobile-toggle{font-size:20px}
+}
+
+@media (max-width:420px){
+  #et-top-navigation{gap:8px}
+  .logo-container img{height:36px}
+}
+
+/* Keep mobile toggle accessible and visually separate from nav links */
+#mobile-toggle{background:transparent;border:0;color:var(--accent);font-size:22px;padding:8px}
+#mobile-toggle:focus{outline:3px solid rgba(var(--accent-rgb),0.12);outline-offset:3px}
+
+/* Mobile overlay panel (hamburger menu) — adapted from the reference site */
+.mobile-overlay{position:fixed;inset:0;background:linear-gradient(rgba(2,6,23,0.45), rgba(2,6,23,0.45));backdrop-filter:blur(4px);z-index:2200;display:none;align-items:flex-start;justify-content:center;padding-top:var(--header-height);}
+.mobile-overlay.open{display:flex}
+.mobile-overlay .panel{width:100%;max-width:420px;background:var(--surface);border-radius:12px;padding:12px;box-shadow:var(--shadow-sm);margin:12px;overflow:hidden;position:relative;transform:translateY(-8px) scale(.98);opacity:0;transition:transform 260ms cubic-bezier(.2,.9,.2,1),opacity 200ms ease}
+.mobile-overlay .panel .close-btn{position:absolute;right:12px;top:12px;background:transparent;border:2px solid rgba(16,42,67,0.08);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--text)}
+  .mobile-overlay .panel ul{list-style:none;padding:8px 8px 18px;margin:0;display:flex;flex-direction:column;gap:8px}
+  .mobile-overlay .panel li{padding:0;margin:0}
+  /* Make mobile panel links follow desktop pill styling (smaller padding, same weight/size, transitions) */
+  .mobile-overlay .panel a{display:block;padding:8px 20px;border-radius:8px;color:var(--text);background:transparent;text-decoration:none;font-weight:600;font-size:0.95rem;transition:background 160ms ease,color 160ms ease,box-shadow 160ms ease}
+  .mobile-overlay .panel a:hover{background:rgba(var(--accent-rgb),0.06)}
+  .mobile-overlay .panel a:focus{outline:3px solid rgba(var(--accent-rgb),0.12);outline-offset:2px}
+  .mobile-overlay .panel a.active{background:var(--accent);color:var(--accent-on);box-shadow:0 8px 28px rgba(var(--accent-rgb),0.12)}
+
+/* animate panel into view when overlay opens */
+.mobile-overlay.open .panel{transform:translateY(0) scale(1);opacity:1}
+
+/* Header show/hide animation (used by script.js via .hidden/.visible classes) */
+.header-anim{transition:transform 260ms ease, opacity 220ms ease, background 220ms ease, box-shadow 220ms ease}
+header.hidden{transform:translateY(-100%);opacity:0;pointer-events:none}
+header.visible{transform:translateY(0);opacity:1;pointer-events:auto}
+
+/* Ensure the top nav items animate together with the header on all viewports */
+header.hidden #top-menu, header.hidden #top-menu-nav { opacity: 0; transform: translateY(-6px); pointer-events: none; transition: opacity 220ms ease, transform 220ms ease; }
+header.visible #top-menu, header.visible #top-menu-nav { opacity: 1; transform: translateY(0); pointer-events: auto; transition: opacity 260ms ease, transform 260ms ease; }
+
+/* Make hamburger hover/active use teal tints */
+.mobile-toggle:hover, .mobile-toggle:focus{color:var(--accent-strong);outline:none}
+
+/* ensure close button and toggle sit above header when open */
+.mobile-toggle{position:relative;z-index:2210}
+
+/* Main hero */
+.et-pb-fullwidth-header-container{position:relative;min-height:100vh;height:100vh;display:block;overflow:hidden}
+.et-parallax-bg{position:absolute;inset:0;height:100vh;min-height:100vh;background-size:cover;background-position:center center;z-index:0}
+.et-pb-fullwidth-header-container::before{ /* removed overlay per user request */ display:none; }
+
+.hero-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:10;padding:28px}
+.hero-inner{position:relative;z-index:12;text-align:center;max-width:980px;margin:0 auto;color:#fff}
+.hero-inner .et-pb-module-header{font-size:clamp(2.6rem,5vw,4.4rem);line-height:1.02;margin:0 0 12px;font-weight:800;letter-spacing:-0.02em;color:var(--accent-on)}
+.hero-inner .et-pb-fullwidth-header-subhead{font-size:clamp(1.2rem,2.2vw,1.8rem);opacity:0.98;color:var(--accent-on);font-weight:600;letter-spacing:0.2px}
+
+/* Page sections */
+.et-pb-section{padding:72px 20px;background:var(--surface);position:relative}
+/* Add a subtle teal border around each regular section (exclude the fullwidth hero) */
+.et-pb-section:not(.et-pb-fullwidth-section){border-radius:10px;padding-top:40px;padding-bottom:48px;margin:12px 0;position:relative}
+.et-pb-section h1,.et-pb-section h2,.et-pb-section h3{color:var(--accent-strong);margin:0 0 18px;font-weight:700;letter-spacing:0.2px}
+.et-pb-text-inner{max-width:880px;margin:0 auto;color:var(--text-muted);line-height:1.65;text-align:center}
+
+/* Slightly larger section headings for modern look */
+.et-pb-section h1{font-size:clamp(1.6rem,2.6vw,2.4rem)}
+.et-pb-section h2{font-size:clamp(1.25rem,2vw,1.6rem)}
+
+/* Side section marker (//) positioned to the left; hides on small screens */
+.section-marker{position:absolute;left:-56px;top:50%;transform:translateY(-50%);font-size:30px;color:rgba(var(--accent-rgb),0.28);font-weight:800;pointer-events:none}
+@media(max-width:880px){.section-marker{display:none}}
+
+/* Active state handled via .active class (visuals defined by separators and toggle borders) */
+
+/* Visual composer style separators: center lines with an h4 in the middle
+  Make the <h4> match the side marker styling but centered between lines */
+.vc_separator{display:flex;align-items:center;justify-content:center;gap:18px;margin:18px 0;padding:12px 0 0.5px;box-sizing:border-box;width:100%}
+.vc_separator .vc_sep_holder,
+.vc_separator .vc_sep_holder_l{flex:1;display:flex;align-items:center;justify-content:center;transform:translateY(-6px)}
+.vc_separator .vc_sep_line{display:block;flex:1;height:1px;background:rgba(var(--accent-rgb),0.22);align-self:center}
+.vc_separator h4{margin:0;padding:0 16px;color:var(--accent-strong);font-weight:800;font-size:1rem;letter-spacing:0.3rem;text-align:center;display:inline-flex;align-items:center;justify-content:center;line-height:1}
+
+/* Ensure the separator visually centers between surrounding content by preventing
+  margins on nearby headings/paragraphs from shifting it. */
+.vc_separator + *{margin-top:8px}
+*.vc_separator{margin-bottom:80px}
+
+/* stronger visuals when section is active */
+.et-pb-section.active .section-marker{color:var(--accent-strong)}
+.et-pb-section.active .vc_separator .vc_sep_line{background:var(--accent)}
+.et-pb-section.active .vc_separator h4{color:var(--accent-strong)}
+
+/* Center and color h4 headings inside sections to match the design */
+.et-pb-section h4{color:var(--accent-strong);text-align:center;margin:0 0 12px}
+
+/* Ensure the empty-space helper keeps its inline height but remains responsive */
+.vc_empty_space{display:block;width:100%}
+.vc_empty_space .vc_empty_space_inner{display:block;height:60px}
+
+/* Color inline SVG icons to the theme teal so stroke=currentColor works */
+.et-pb-main-blurb-image svg,
+.et-pb-module svg,
+.et-pb-blurb svg,
+.contact-map-wrap svg,
+.et-pb-blurb .et-pb-image-wrap svg{ color: var(--accent-strong); }
+
+/* Ensure SVG paths use currentColor for stroke/fill where applicable */
+.et-pb-main-blurb-image svg path,
+.et-pb-module svg path,
+.et-pb-blurb svg path,
+.contact-map-wrap svg path{ stroke: currentColor;  }
+
+/* Make <strong> emphasize using the theme accent color */
+.et-pb-section strong, .et-pb-text strong{color:var(--accent-strong)}
+
+/* Stronger separator/h4 when nearby section is active */
+.et-pb-section.active .vc_separator .vc_sep_line{background:rgba(var(--accent-rgb),0.28)}
+.et-pb-section.active .vc_separator h4{color:rgba(var(--accent-rgb),0.28)}
+
+/* Solutions blurbs grid */
+#services-row-4{display:grid;grid-template-columns:1fr;gap:28px;padding-top:8px}
+.et-pb-blurb{background:#fff;border-radius:12px;padding:20px;box-shadow:var(--shadow-sm);text-align:center}
+.et-pb-main-blurb-image img, .et-pb-main-blurb-image svg{width:72px;height:72px;margin:0 auto 12px;display:block}
+
+@media (min-width:881px){
+  #services-row-4{grid-template-columns:repeat(3,1fr)}
+  .container{padding:0 28px}
+
+  /* Desktop: ensure the top-menu sits close to the right edge of the full-bleed header
+    Remove the oversized 800px left padding and instead rely on small paddings so the
+    logo and menu align correctly without overlapping. */
+  /* Desktop: align top-menu to the right and use the same edge padding as mobile */
+  #top-menu-nav{flex:1 1 auto;display:flex;justify-content:flex-end;padding-right:calc(var(--edge-pad) + var(--edge-nudge));padding-left:0}
+  #top-menu{margin-right:calc(var(--edge-pad) + var(--edge-nudge))}
+  /* enforce ordering in desktop as well: logo left, nav right */
+  .logo-container{order:0}
+  #top-menu-nav{order:1}
+  #mobile-toggle{order:2}
+}
+
+/* Center rows, paragraphs and toggle content inside the Services section and related rows
+   This targets: .et-pb-section.et-pb-section-2.et-section-regular and its rows/columns */
+#services, .et-pb-section-2, .et-pb-section.et-pb-section-2.et-section-regular { text-align: center; }
+#services .et-pb-row, .et-pb-section-2 .et-pb-row { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+#services .et-pb-column, .et-pb-section-2 .et-pb-column{ width:100%; }
+#services .service-content p, .et-pb-section-2 p { text-align:center; margin-left:auto; margin-right:auto; max-width:1350px; }
+
+/* Mobile overlay anchors: make them full-width, readable, and remove inherited transparent/white styles */
+.mobile-overlay .panel a{display:block;width:100%;box-sizing:border-box;padding:8px 20px;border-radius:8px;color:var(--text);background:transparent;text-align:left;font-weight:600;font-size:0.95rem;transition:background 160ms ease,color 160ms ease,box-shadow 160ms ease}
+.mobile-overlay .panel a:hover{background:rgba(var(--accent-rgb),0.06)}
+.mobile-overlay .panel a:focus{outline:3px solid rgba(var(--accent-rgb),0.12);outline-offset:2px}
+.mobile-overlay .panel a.active{background:var(--accent);color:var(--accent-on);box-shadow:0 8px 28px rgba(var(--accent-rgb),0.12)}
+
+/* Ensure role=menuitem links in desktop nav don't inherit hero white color when used in other contexts */
+#top-menu a[role="menuitem"]{color:inherit}
+
+/* Contact layout */
+.et-pb-row-8{max-width:var(--max-width);margin:0 auto;display:grid;grid-template-columns:1fr;gap:20px}
+.contact-map{width:100%;height:260px;border:0;border-radius:10px;box-shadow:0 10px 30px rgba(2,36,73,0.08)}
+@media(min-width:881px){.et-pb-row-8{grid-template-columns:1fr 360px;align-items:start}}
+
+/* Toggle / accordion */
+.service-section{border-radius:12px;padding:0;margin-bottom:16px;background:#fff;box-shadow:0 6px 18px rgba(16,42,67,0.04);transition:box-shadow 240ms ease, transform 180ms ease}
+.service-section .service-title{padding:16px;font-weight:700;color:var(--accent-strong);text-align:center; font-size:clamp(1.25rem,2.2vw,1.6rem)}
+.service-section .service-content{padding:18px;border-top:1px solid rgba(16,42,67,0.04);color:var(--text-muted)}
+
+/* Keep a subtle elevated state for emphasis (no toggle border) */
+.et-pb-accordion-item, .service-section, .et-pb-module.et-pb-accordion-item{border:0;border-radius:10px;background:#fff;margin:12px 0;padding:0;overflow:visible}
+.et-pb-accordion-item .service-title, .service-section .service-title{color:var(--accent-strong)}
+.service-section.open, .service-section.active{box-shadow:0 14px 36px rgba(var(--accent-rgb),0.08);transform:translateY(-2px)}
+
+/* Ensure toggles inside the main nav sections (#about, #services, #solutions, #colab, #colabions, #contact)
+  inherit the same block-level width and spacing for consistent layout */
+#about .service-section, #services .service-section, #solutions .service-section, #colab .service-section, #colabions .service-section, #contact .service-section{width:100%;box-sizing:border-box}
+
+/* Make service titles stand out slightly more */
+.service-section .service-title{letter-spacing:0.02em}
+
+/* Footer-like small tweaks (if you add a footer later) */
+footer{background:#06263f;color:#cde8ff;padding:32px}
+
+/* Tiny accessibility focus */
+:focus{outline:3px solid rgba(28,174,167,0.18);outline-offset:3px}
+
+/* Keep some utility spacing used by the HTML */
+.section-spacer{height:2rem}
+
+/* Ensure header becomes solid on scroll in JS by applying .scrolled */
+/* Scrolled header uses a subtle translucent blur to show content beneath */
+header#main-header.scrolled{background: rgba(255,255,255,0.72); -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); box-shadow:0 6px 22px rgba(9,27,44,0.08)}
+
+/* When header is solid, set nav link colors to body text and active to accent */
+header#main-header.scrolled #top-menu a{color:#000}
+header#main-header.scrolled #top-menu a.active{background:var(--accent);color:var(--accent-on)}
+
+/* End of new theme */
+
+
+/* Global link color defaults (scoped and without !important so component styles can override).
+   We avoid forcing colors globally with !important because that can break nav and overlay
+   active states which rely on more specific classes. These defaults apply to page content
+   rather than UI chrome like the header/nav/overlay. */
+/* Content links (text blocks and section content) */
+.et-pb-text-inner a,
+.et-pb-section a,
+.et-pb-blurb a,
+.contact-map-wrap a,
+.et-pb-module a { color: #0e8b83; }
+.et-pb-text-inner a:visited,
+.et-pb-section a:visited,
+.et-pb-blurb a:visited,
+.contact-map-wrap a:visited,
+.et-pb-module a:visited { color: var(--accent); }
+.et-pb-text-inner a:hover,
+.et-pb-section a:hover,
+.et-pb-blurb a:hover { color: #000; }
+
+/* Keep UI elements (nav, mobile overlay) free to use their own colors and active states. */
+
+
+/* -----------------------------
+   Service cards (.ser-card)
+   - used inside .ser-row (rows of service cards)
+   - responsive: wrap on small screens, 3-up on larger
+   - visual card: white surface, subtle border, rounded corners, shadow
+   - hover: gentle lift and stronger shadow
+   ----------------------------- */
+.ser-row{display:flex;flex-wrap:wrap;gap:18px;justify-content:center;align-items:stretch;margin-top:12px}
+.ser-row .ser-card{background:linear-gradient(180deg, #ffffff, #fbfdfe);border-radius:12px;padding:18px;box-shadow:0 8px 28px rgba(16,42,67,0.06);border:1px solid rgba(16,42,67,0.04);flex:1 1 240px;min-width:220px;max-width:420px;display:flex;flex-direction:column;gap:8px;transition:transform 220ms cubic-bezier(.2,.9,.3,1),box-shadow 220ms ease,border-color 220ms ease}
+.ser-row .ser-card strong{color:var(--accent-strong);font-size:1.02rem}
+.ser-row .ser-card p{color:var(--text-muted);margin:0;font-size:0.95rem;line-height:1.5}
+.ser-row .ser-card:hover{transform:translateY(-6px);box-shadow:0 18px 48px rgba(16,42,67,0.10);border-color:rgba(var(--accent-rgb),0.12)}
+
+@media (min-width:1100px){
+  /* make rows more grid-like on very wide screens */
+  .ser-row{gap:26px}
+  .ser-row .ser-card{flex-basis:30%}
+}
+
+@media (max-width:600px){
+  .ser-row{gap:12px}
+  .ser-row .ser-card{flex-basis:100%;min-width:100%}
+}
+
+/* NOTE: .ser-column removed — use .ser-row for horizontal/vertical card layouts.
+  If you need column-first stacking, use .ser-row with flex-direction:column
+  or a small helper modifier. */
+
+/* Reveal-on-scroll: initial hidden state applied only when JS enables it (.reveal-ready)
+   This prevents FOUC for no-JS users while allowing animated reveal for JS users. */
+.reveal-ready .ser-row .ser-card{opacity:0;transform:translateY(14px) scale(.995);transition:opacity 260ms cubic-bezier(.2,.9,.2,1),transform 260ms cubic-bezier(.2,.9,.2,1);will-change:transform,opacity}
+
+/* Animated pop-in class appended by JS when the card enters viewport */
+.reveal-ready .ser-row .ser-card.ser-card--pop{opacity:1;transform:translateY(0) scale(1);animation:ser-pop-in 420ms cubic-bezier(.18,.9,.28,1) both}
+
+@keyframes ser-pop-in{
+  0%{opacity:0;transform:translateY(18px) scale(.985)}
+  60%{opacity:1;transform:translateY(-6px) scale(1.02)}
+  100%{opacity:1;transform:translateY(0) scale(1)}
+}
+
+/* Staggering is applied by JS via inline animation-delay per card. */
+
+/* Reduced motion: prefer no movement — fade in instantly */
+@media (prefers-reduced-motion: reduce){
+  .reveal-ready .ser-row .ser-card{transition:none;transform:none;opacity:1}
+  .reveal-ready .ser-row .ser-card.ser-card--pop{animation:none}
+}
+
+/* Slide-in variants used inside the Solutions section: left and right entrances */
+.ser-card--slide-left{animation-name:ser-slide-in-left;animation-duration:520ms;animation-fill-mode:both;animation-timing-function:cubic-bezier(.18,.9,.28,1);}
+.ser-card--slide-right{animation-name:ser-slide-in-right;animation-duration:520ms;animation-fill-mode:both;animation-timing-function:cubic-bezier(.18,.9,.28,1);}
+
+@keyframes ser-slide-in-left{
+  0%{opacity:0;transform:translateX(-22px) scale(.995)}
+  60%{opacity:1;transform:translateX(6px) scale(1.01)}
+  100%{opacity:1;transform:translateX(0) scale(1)}
+}
+
+@keyframes ser-slide-in-right{
+  0%{opacity:0;transform:translateX(22px) scale(.995)}
+  60%{opacity:1;transform:translateX(-6px) scale(1.01)}
+  100%{opacity:1;transform:translateX(0) scale(1)}
+}
+
+/* When inside #solutions, prefer horizontal entrance; ensure initial hidden state still applies
+   The JS will add --slide-left / --slide-right classes instead of --pop for these cards */
+.reveal-ready #solutions .ser-row .ser-card{opacity:0;transform:translateX(16px);transition:none}
+
+@media (prefers-reduced-motion: reduce){
+  .ser-card--slide-left, .ser-card--slide-right{animation:none !important;transform:none !important;opacity:1 !important}
+}
+
+/* Ensure hover lift still applies when reveal-ready is present (higher specificity than .reveal-ready rule order)
+   This restores the original hover behavior but keeps reduced-motion support. */
+.reveal-ready .ser-row .ser-card:hover,
+.ser-row .ser-card:hover{
+  transform:translateY(-6px) !important;
+  box-shadow:0 18px 48px rgba(16,42,67,0.10) !important;
+  border-color:rgba(var(--accent-rgb),0.12) !important;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .reveal-ready .ser-row .ser-card:hover,
+  .ser-row .ser-card:hover{ transform:none !important; }
+}
